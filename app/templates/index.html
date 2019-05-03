@@ -15,10 +15,10 @@
         <div class="col">
             <h1>Вход в систему элетронной почты</h1>
 
-            <form>
+            <form action="{{ url_for('mail_input', search_email=search_email) }}">
                 <div class="form-group">
                     <label for="search">Адрес электронной почты</label>
-                    <input name="search" class="form-control" type="search" value="{{search}}"
+                    <input name="search_email" class="form-control" type="search" value="{{ search_email }}"
                            placeholder="user@rmail.ru">
                     <small id="emailHelp" class="form-text text-muted">Пожалуйста, введите полное название своей
                         электронной почты

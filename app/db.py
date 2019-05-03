@@ -17,6 +17,36 @@ def get_name(db_url, page=1):
         ).fetchall()
         return user_name
 
+
+def search_email_user(db_url, search_email):
+    with open_db(db_url) as db:
+        search = db.cursor().execute(
+            'SELECT u.surname, u.email, l.topic, l.letter_date, l.recipient_id FROM letters l, users u WHERE l.recipient_id = :search_email AND l.sender_id = u.id ORDER BY l.letter_id DESC LIMIT 20', {'search_email': search_email}).fetchall()
+        return search
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+# search = request.args.get('search')
+#         if search:
+#             products = product_manager.search_by_name(search)
+#         else:
+#             products = product_manager.items
+#             search=''
+
+
 #
 # def search_notes(db_url, name):
 #     pass
