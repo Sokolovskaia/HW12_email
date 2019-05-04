@@ -12,7 +12,7 @@ def get_name(db_url, page=1):
         limit = 50
         offset = limit * (page - 1)
         user_name = db.cursor().execute(
-            'SELECT id, surname, name, email FROM users LIMIT :limit OFFSET :offset',
+            'SELECT id, surname, name, email, password FROM users LIMIT :limit OFFSET :offset',
             {'limit': limit, 'offset': offset}
         ).fetchall()
         return user_name
