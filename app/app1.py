@@ -38,6 +38,26 @@ def inbox():
     inbox_result = db.inbox_for_user(DATABASE_URL, search_email)
     return render_template('inbox.html', mails=inbox_result)
 
+@app.route('/outbox')
+def outbox():
+    search_email = session['id']
+    outbox_result = db.outbox_for_user(DATABASE_URL, search_email)
+    return render_template('outbox.html', mails=outbox_result)
+
+@app.route('/drafts')
+def drafts():
+    search_email = session['id']
+    drafts_result = db.drafts_for_user(DATABASE_URL, search_email)
+    return render_template('drafts.html', mails=drafts_result)
+
+@app.route('/basket')
+def basket():
+    search_email = session['id']
+    basket_result = db.basket_for_user(DATABASE_URL, search_email)
+    return render_template('basket.html', mails=basket_result)
+
+
+
 
 if __name__ == '__main__':
     app.run()
