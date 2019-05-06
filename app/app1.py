@@ -35,26 +35,35 @@ def login():
 @app.route('/inbox')
 def inbox():
     search_email = session['id']
-    inbox_result = db.inbox_for_user(DATABASE_URL, search_email)
+    inbox_result = db.inbox_for_user(search_email)
     return render_template('inbox.html', mails=inbox_result)
 
 @app.route('/outbox')
 def outbox():
     search_email = session['id']
-    outbox_result = db.outbox_for_user(DATABASE_URL, search_email)
+    outbox_result = db.outbox_for_user(search_email)
     return render_template('outbox.html', mails=outbox_result)
 
 @app.route('/drafts')
 def drafts():
     search_email = session['id']
-    drafts_result = db.drafts_for_user(DATABASE_URL, search_email)
+    drafts_result = db.drafts_for_user(search_email)
     return render_template('drafts.html', mails=drafts_result)
 
 @app.route('/basket')
 def basket():
     search_email = session['id']
-    basket_result = db.basket_for_user(DATABASE_URL, search_email)
+    basket_result = db.basket_for_user(search_email)
     return render_template('basket.html', mails=basket_result)
+
+
+@app.route('/letter/<letter_id>')
+def letter(letter_id):
+    letter_result = db.full_letter(letter_id)
+    return render_template('letter.html', mails=letter_result)
+
+
+
 
 
 

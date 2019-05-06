@@ -41,40 +41,41 @@
                 </div>
             </nav>
         </header>
+    </div>
+</div>
+<div class="col-md-8 col-lg-9 content-container" style="background-color: #BBDEFB">
 
-        <div class="col-md-8 col-lg-9 content-container" style="background-color: #BBDEFB">
-
-            <div class="row">
-                <div class="col">
-
-
-                    <table class="table">
-                        <thead>
-                        <tr>
-                            <th scope="col">Фамилия получателя</th>
-                            <th scope="col">Адрес электронной почты</th>
-                            <th scope="col">Тема письма</th>
-                            <th scope="col">Дата</th>
-                        </tr>
-                        </thead>
-                        <tbody>
-                        {% for mm in mails %}
-                        <tr>
-
-                            <td>{{ mm.surname }}</td>
-                            <td>{{ mm.email }}</td>
-                            <td>{{ mm.topic }}</td>
-                            <td>{{ mm.letter_date }}</td>
-                        </tr>
-                        {% endfor %}
-                        </tbody>
-
-                    </table>
+    <div class="row">
+        <div class="col">
 
 
-                </div>
-            </div>
+            <table class="table">
+                <thead>
+                <tr>
+                    <th scope="col">Фамилия получателя</th>
+                    <th scope="col">Адрес электронной почты</th>
+                    <th scope="col">Тема письма</th>
+                    <th scope="col">Дата</th>
+                </tr>
+                </thead>
+                <tbody>
+                {% for mm in mails %}
+                <tr>
+
+                    <td>{{ mm.surname }}</td>
+                    <td>{{ mm.email }}</td>
+                    <td>{{ mm.topic }}</td>
+                    <td>{{ mm.letter_date }}</td>
+                </tr>
+                {% endfor %}
+                </tbody>
+
+            </table>
+
+
         </div>
+    </div>
+</div>
 
 </body>
 </html>

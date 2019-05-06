@@ -7,7 +7,7 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
           integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
-    <title>Электронная почта</title>
+    <title>Document</title>
 </head>
 <body>
 
@@ -43,41 +43,18 @@
         </header>
     </div>
 </div>
-<div class="col-md-8 col-lg-9 content-container" style="background-color: #BBDEFB">
 
-    <div class="row">
-        <div class="col">
+П И С Ь М О !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
 
-            <table class="table">
-                <thead>
-                <tr>
-                    <th scope="col">Фамилия получателя</th>
-                    <th scope="col">Адрес электронной почты</th>
-                    <th scope="col">Тема письма</th>
-                    <th scope="col">Дата</th>
-                </tr>
-                </thead>
-                <tbody>
-                {% for mm in mails %}
-                <tr>
-
-                    <td>{{ mm.surname }}</td>
-                    <td>{{ mm.email }}</td>
-                    <td>{{ mm.topic }}</td>
-                    <td>{{ mm.letter_date }}</td>
-                </tr>
-                {% endfor %}
-                </tbody>
-
-            </table>
+        Тема: {{ mails.topic }}
+        Фамилия отправителя: {{mails.surname }}
+        Адрес отправителя{{ mails.email }}
+        Дата: {{ mails.letter_date }}
+        Текст письма: {{ mails.letter_body }}
 
 
-        </div>
-    </div>
-</div>
+
 
 </body>
 </html>
-
-
