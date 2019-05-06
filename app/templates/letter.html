@@ -41,19 +41,16 @@
                 </div>
             </nav>
         </header>
+
+        <ul>
+            <li>Тема: {{ mails.topic }}</li>
+            <li>Фамилия отправителя: {{mails.surname }}</li>
+            <li>Адрес отправителя: {{ mails.email }}</li>
+            <li>Дата: {{ mails.letter_date }}</li>
+            <li>Текст письма: {{ mails.letter_body }}</li>
+        </ul>
     </div>
 </div>
-
-П И С Ь М О !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-
-
-        Тема: {{ mails.topic }}
-        Фамилия отправителя: {{mails.surname }}
-        Адрес отправителя{{ mails.email }}
-        Дата: {{ mails.letter_date }}
-        Текст письма: {{ mails.letter_body }}
-
-
 
 
 </body>

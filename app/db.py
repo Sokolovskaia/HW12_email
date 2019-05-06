@@ -41,14 +41,14 @@ def inbox_for_user(search_email):
 def outbox_for_user(search_email):
     with open_db(DATABASE_URL) as db:
         result = db.cursor().execute(
-            'SELECT u.surname, u.email, l.topic, l.letter_date FROM letters l, users u WHERE l.sender_id = :search_email AND l.recipient_id = u.id AND l.deleted = 0 AND l.draft = 0 ORDER BY l.letter_id DESC LIMIT 20',
+            'SELECT u.surname, u.email, l.topic, l.letter_date, l.letter_id FROM letters l, users u WHERE l.sender_id = :search_email AND l.recipient_id = u.id AND l.deleted = 0 AND l.draft = 0 ORDER BY l.letter_id DESC LIMIT 20',
             {'search_email': search_email}).fetchall()
         return result
 
 def drafts_for_user(search_email):
     with open_db(DATABASE_URL) as db:
         result = db.cursor().execute(
-            'SELECT u.surname, u.email, l.topic, l.letter_date FROM letters l LEFT JOIN users u ON l.recipient_id = u.id WHERE l.sender_id = :search_email AND l.deleted = 0 AND l.draft = 1 ORDER BY l.letter_id DESC LIMIT 20',
+            'SELECT u.surname, u.email, l.topic, l.letter_date, l.letter_id FROM letters l LEFT JOIN users u ON l.recipient_id = u.id WHERE l.sender_id = :search_email AND l.deleted = 0 AND l.draft = 1 ORDER BY l.letter_id DESC LIMIT 20',
             {'search_email': search_email}).fetchall()
         return result
 
@@ -56,7 +56,7 @@ def drafts_for_user(search_email):
 def basket_for_user(search_email):
     with open_db(DATABASE_URL) as db:
         result = db.cursor().execute(
-            'SELECT u.surname, u.email, l.topic, l.letter_date FROM letters l LEFT JOIN users u ON l.recipient_id = u.id WHERE :search_email IN (l.sender_id, l.recipient_id) AND l.deleted = 1 AND l.draft = 0 ORDER BY l.letter_id DESC LIMIT 20',
+            'SELECT u.surname, u.email, l.topic, l.letter_date, l.letter_id FROM letters l LEFT JOIN users u ON l.recipient_id = u.id WHERE :search_email IN (l.sender_id, l.recipient_id) AND l.deleted = 1 AND l.draft = 0 ORDER BY l.letter_id DESC LIMIT 20',
             {'search_email': search_email}).fetchall()
         return result
 
