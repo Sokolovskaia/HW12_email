@@ -66,7 +66,9 @@ def basket():
 @app.route('/letter/<letter_id>')
 def letter(letter_id):
     letter_result = db.full_letter(letter_id)
-    return render_template('letter.html', mails=letter_result)
+    search_email = session['id']
+    count_result = db.count_inbox_for_menu(search_email)
+    return render_template('letter.html', mails=letter_result, inbox_count=count_result)
 
 
 
