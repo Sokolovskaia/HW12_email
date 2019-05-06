@@ -73,6 +73,39 @@ def full_letter(search_letter):
 def count_inbox_for_menu(search_email):
     with open_db(DATABASE_URL) as db:
         result = db.cursor().execute(
-            'SELECT count(*) count_for_menu FROM letters l WHERE l.recipient_id = :search_email AND l.deleted = 0 AND l.draft = 0',
+            '''select sum (inbox) count_for_inbox
+                    , sum (inbox_unread) count_for_inbox_unread
+                    , sum (outbox) count_for_outbox
+                    , sum (draft) count_for_draft
+                    , sum (basket) count_for_basket
+  from (
+           SELECT COUNT(*)                                                    inbox
+                , coalesce(SUM(case when l.reading_status = 0 then 1 END), 0) inbox_unread
+                , 0                                                           outbox
+                , 0                                                           draft
+                , 0                                                           basket
+           FROM letters l
+           WHERE l.recipient_id = :search_email
+             AND l.draft = 0
+             AND l.deleted = 0
+           union
+           SELECT 0                                                           inbox
+                , 0                                                           inbox_unread
+                , coalesce(SUM(case when l.draft = 0 then 1 END), 0)          outbox
+                , coalesce(SUM(case when l.draft = 1 then 1 END), 0)          draft
+                , 0                                                           basket
+           FROM letters l
+           WHERE l.sender_id = :search_email
+             AND l.deleted = 0
+           union
+           SELECT 0                                                           inbox
+                , 0                                                           inbox_unread
+                , 0                                                           outbox
+                , 0                                                           draft
+                , COUNT(*)                                                    basket
+           FROM letters l
+           WHERE :search_email IN (l.sender_id, l.recipient_id)
+             AND l.deleted = 1
+       )''',
             {'search_email': search_email}).fetchone()
         return result

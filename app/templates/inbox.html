@@ -25,16 +25,16 @@
                 <div class="collapse navbar-collapse" id="navbarSupportedContent">
                     <ul class="navbar-nav mr-auto flex-column">
                         <li class="nav-item active">
-                            <a href="{{ url_for('inbox') }}" class="nav-link">Входящие ({{ inbox_count.count_for_menu }})</a>
+                            <a href="{{ url_for('inbox') }}" class="nav-link">Входящие ({{ inbox_count.count_for_inbox }}) - ({{ inbox_count.count_for_inbox_unread }})</a>
                         </li>
                         <li class="nav-item">
-                            <a href="{{ url_for('outbox') }}" class="nav-link">Исходящие</a>
+                            <a href="{{ url_for('outbox') }}" class="nav-link">Исходящие ({{ inbox_count.count_for_outbox }}) </a>
                         </li>
                         <li class="nav-item">
-                            <a href="{{ url_for('drafts') }}" class="nav-link">Черновики</a>
+                            <a href="{{ url_for('drafts') }}" class="nav-link">Черновики ({{ inbox_count.count_for_draft }}) </a>
                         </li>
                         <li class="nav-item">
-                            <a href="{{ url_for('basket') }}" class="nav-link">Корзина</a>
+                            <a href="{{ url_for('basket') }}" class="nav-link">Корзина ({{ inbox_count.count_for_basket }}) </a>
                         </li>
 
                     </ul>
