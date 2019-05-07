@@ -101,11 +101,11 @@ def full_letter(search_letter):
 def count_inbox_for_menu(search_email):
     with open_db(DATABASE_URL) as db:
         result = db.cursor().execute(
-            '''SELECT SUM (inbox) count_for_inbox
-                    , SUM (inbox_unread) count_for_inbox_unread
-                    , SUM (outbox) count_for_outbox
-                    , SUM (draft) count_for_draft
-                    , SUM (basket) count_for_basket
+            '''SELECT SUM (inbox)                                                     count_for_inbox
+                    , SUM (inbox_unread)                                              count_for_inbox_unread
+                    , SUM (outbox)                                                    count_for_outbox
+                    , SUM (draft)                                                     count_for_draft
+                    , SUM (basket)                                                    count_for_basket
                 FROM (
                    SELECT COUNT(*)                                                    inbox
                         , COALESCE(SUM(CASE WHEN l.reading_status = 0 THEN 1 END), 0) inbox_unread
@@ -137,3 +137,14 @@ def count_inbox_for_menu(search_email):
                )''',
             {'search_email': search_email}).fetchone()
         return result
+
+
+def create(search_email, recipient, topic, body, date):
+    with open_db(DATABASE_URL) as db:
+        result = db.cursor().execute(
+            '''INSERT INTO letters (sender_id, recipient_id, topic, letter_body, letter_date) 
+               VALUES (:search_email, :recipient, :topic, :body, :date)''',
+            {'search_email': search_email, 'recipient': recipient, 'topic': topic, 'body': body,
+             'date': date})
+        db.commit()
+    return result
