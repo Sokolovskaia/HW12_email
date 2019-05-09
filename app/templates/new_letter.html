@@ -40,9 +40,9 @@
                             <a href="{{ url_for('basket') }}" class="nav-link">Корзина ({{ inbox_count.count_for_basket
                                 }}) </a>
                         </li>
-<!--                        <li class="nav-item">-->
-<!--                            <a href="{{ url_for('create_letter') }}" class="nav-link"> НАПИСАТЬ ПИСЬМО </a>-->
-<!--                        </li>-->
+                        <!--                        <li class="nav-item">-->
+                        <!--                            <a href="{{ url_for('create_letter') }}" class="nav-link"> НАПИСАТЬ ПИСЬМО </a>-->
+                        <!--                        </li>-->
 
                     </ul>
                 </div>
@@ -58,16 +58,21 @@
 
                     <form method="post">
                         <p><label for="recipient">Кому</label>
-                        <input name="recipient" id="recipient" required></p>
+                            <input name="recipient" id="recipient" required></p>
                         <p><label for="topic">Тема</label>
-                        <input name="topic" id="topic" required></p>
+                            <input name="topic" id="topic" required></p>
                         <p><label for="body">Основной текст письма</label>
-                        <input name="body" id="body" required></p>
+                            <input name="body" id="body" required></p>
                         <p><label for="date">Дата</label>
-                        <input name="date" id="date" required></p>
-                        <p><button type="submit">Отправить</button>
-                        <button type="submit">Сохранить</button>
-                        <button type="reset">Очистить форму</button></p>
+                            <input name="date" id="date" required></p>
+
+                        <p><label for="draft">Черновик - 1</label>
+                            <input name="draft" id="draft" required></p>
+                        <p>
+                            <button type="submit">Отправить</button>
+                            <button type="submit">Сохранить</button>
+                            <button type="reset">Очистить форму</button>
+                        </p>
                     </form>
 
 

@@ -79,18 +79,20 @@ def start():
             topic = request.form['topic']
             body = request.form['body']
             date = request.form['date']
-            db.create(search_email, recipient, topic, body, date)
+            draft = request.form['draft']
+            db.create(search_email, recipient, topic, body, date, draft)
 
             return redirect(url_for('inbox'))
 
         return render_template('new_letter.html', inbox_count=count_result)
 
-
-
-
-
-
-
+    @app.route('/statistics')
+    def statistics():
+        stat1 = db.statistics_who_writes_to_whom()  # кто с кем переписывается
+        stat2 = db.most_letters()  # Кто с кем больше всего переписывается (кол-во отправленных/полученных)
+        stat3 = db.ignored_users()  # Кто кого игнорирует (не отвечает на письма)
+        return render_template('statistics.html', result_statistics1=stat1, result_statistics2=stat2,
+                               result_statistics3=stat3)
 
     if os.getenv('APP_ENV') == 'PROD' and os.getenv('PORT'):
         waitress.serve(app, port=os.getenv('PORT'))

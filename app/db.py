@@ -139,12 +139,50 @@ def count_inbox_for_menu(search_email):
         return result
 
 
-def create(search_email, recipient, topic, body, date):
+def create(search_email, recipient, topic, body, date, draft):
     with open_db(DATABASE_URL) as db:
         result = db.cursor().execute(
-            '''INSERT INTO letters (sender_id, recipient_id, topic, letter_body, letter_date) 
-               VALUES (:search_email, :recipient, :topic, :body, :date)''',
+            '''INSERT INTO letters (sender_id, recipient_id, topic, letter_body, letter_date, draft) 
+               VALUES (:search_email, :recipient, :topic, :body, :date, :draft)''',
             {'search_email': search_email, 'recipient': recipient, 'topic': topic, 'body': body,
-             'date': date})
+             'date': date, 'draft': draft})
         db.commit()
     return result
+
+
+def statistics_who_writes_to_whom():
+    with open_db(DATABASE_URL) as db:
+        result = db.cursor().execute(
+            '''SELECT DISTINCT l.sender_id, group_concat(DISTINCT l.recipient_id) recipients
+            FROM letters l
+            WHERE l.draft = 0
+            GROUP BY l.sender_id''').fetchall()
+        return result
+
+
+def most_letters():
+    with open_db(DATABASE_URL) as db:
+        result = db.cursor().execute(
+            '''SELECT CASE WHEN l.sender_id <= l.recipient_id then l.sender_id else l.recipient_id end person1
+                    , CASE WHEN l.sender_id <= l.recipient_id then l.recipient_id else l.sender_id end person2
+                    , count (0) num_letters
+                 FROM letters l
+                WHERE l.draft = 0
+                GROUP BY person1, person2
+                ORDER BY num_letters DESC
+                LIMIT 10''').fetchall()
+        return result
+
+
+def ignored_users():
+    with open_db(DATABASE_URL) as db:
+        result = db.cursor().execute(
+            '''SELECT CASE WHEN l.sender_id <= l.recipient_id then l.sender_id else l.recipient_id end person1
+                    , CASE WHEN l.sender_id <= l.recipient_id then l.recipient_id else l.sender_id end person2
+                    , coalesce (sum (CASE WHEN l.sender_id <= l.recipient_id then 1 else 0 end), 0) sent_by_person1
+                    , coalesce (sum (CASE WHEN l.sender_id <= l.recipient_id then 0 else 1 end), 0) sent_by_person2
+                 FROM letters l
+                WHERE l.draft = 0
+             GROUP BY person1, person2
+         HAVING 0 IN (sent_by_person1, sent_by_person2)''').fetchall()
+        return result
