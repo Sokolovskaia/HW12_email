@@ -38,9 +38,11 @@ def start():
     @app.route('/inbox')
     def inbox():
         search_email = session['id']
+        user_email = session['login']
+        user_surname = session['last_name']
         inbox_result = db.inbox_for_user(search_email)
         count_result = db.count_inbox_for_menu(search_email)
-        return render_template('inbox.html', mails=inbox_result, inbox_count=count_result)
+        return render_template('inbox.html', mails=inbox_result, inbox_count=count_result, user_email=user_email, user_surname=user_surname)
 
     @app.route('/outbox')
     def outbox():

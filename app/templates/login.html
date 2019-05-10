@@ -8,12 +8,14 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
           integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
-    <title>Document</title>
+    <title>Вход в систему</title>
 
 
 </head>
 
 <body>
+<p class="h1 text-center font-weight-bold">Вход в корпоративную почту</p>
+
 
 {% with messages = get_flashed_messages() %}
 {% if messages %}
@@ -24,20 +26,24 @@
 </ul>
 {% endif %}
 {% endwith %}
+<div class="container">
+    <form method="post">
+        <div class="form-group row">
+            <label for="username" class="col-sm-3 col-form-label col-form-label-lg">Введите ваш email</label>
+            <div class="col-sm-10">
+                <input class="form-control form-control-lg" name="username" id="username" placeholder="user@rmail.ru" required></div>
+            <label for="password" class="col-sm-3 col-form-label col-form-label-lg">Введите ваш пароль</label>
+            <div class="col-sm-10">
+                <input class="form-control form-control-lg" type="password" name="password" id="password" placeholder="пароль" required></div></div>
 
-<form method="post">
-    <label for="username">Username</label>
-    <input name="username" id="username" required>
-    <label for="password">Password</label>
-    <input type="password" name="password" id="password" required>
-    <input type="submit" value="Log In">
-</form>
-
-
-<a href="{{ url_for('statistics') }}">Статистика по корпоративной почте</a>
+            <p><button type="submit" class="btn btn-info">Primary</button></p>
 
 
 
+    </form>
+</div>
+
+<p class="h3 text-center font-italic"><a href="{{ url_for('statistics') }}">Статистика по корпоративной почте</a></p>
 
 
 </body>
