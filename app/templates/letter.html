@@ -25,7 +25,8 @@
                 <div class="collapse navbar-collapse" id="navbarSupportedContent">
                     <ul class="navbar-nav mr-auto flex-column">
                         <li class="nav-item active">
-                            <a href="{{ url_for('inbox') }}" class="nav-link">Входящие ({{ inbox_count.count_for_inbox }}) - ({{ inbox_count.count_for_inbox_unread }})</a>
+                            <a href="{{ url_for('inbox') }}" class="nav-link">Входящие ({{ inbox_count.count_for_inbox
+                                }}) - ({{ inbox_count.count_for_inbox_unread }})</a>
                         </li>
                         <li class="nav-item">
                             <a href="{{ url_for('outbox') }}" class="nav-link">Исходящие</a>
@@ -42,13 +43,27 @@
             </nav>
         </header>
 
-        <ul>
-            <li>Тема: {{ mails.topic }}</li>
-            <li>Фамилия отправителя: {{mails.surname }}</li>
-            <li>Адрес отправителя: {{ mails.email }}</li>
-            <li>Дата: {{ mails.letter_date }}</li>
-            <li>Текст письма: {{ mails.letter_body }}</li>
-        </ul>
+        <div class="card w-75">
+            <div class="card-body">
+                <div class="card text-center">
+                    <div class="card-header">
+                        Фамилия отправителя: {{mails.surname }}
+                        <p>Email отправителя: {{ mails.email }}</p>
+                    </div>
+                    <div class="card-body">
+                        <h5 class="card-title"> Тема письма: {{ mails.topic }} </h5>
+                        <p class="card-text"> {{ mails.letter_body }} </p>
+
+                    </div>
+                    <div class="card-footer text-muted">
+                        {{ mails.letter_date }}
+                    </div>
+                    <div><a href="{{ url_for('create_letter') }}" class="btn btn-primary"> Написать письмо </a></div>
+                </div>
+
+
+            </div>
+        </div>
     </div>
 </div>
 
