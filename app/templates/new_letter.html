@@ -49,39 +49,36 @@
             </nav>
         </header>
 
-        <div class="col-md-8 col-lg-9 content-container" style="background-color: #BBDEFB">
-            <div class="row">
-                <div class="col">
 
-                    <h1>Новое письмо</h1>
+        <div class="container">
+            <h2>Создать новое письмо</h2>
+            <form method="post">
+                <div class="form-group">
+                    <p><label for="recipient" class="form-label-lg">Кому</label>
+                        <input class="form-control" name="recipient" id="recipient" required></p>
+                    <p><label for="topic" class="form-label-lg">Тема</label>
+                        <input class="form-control" name="topic" id="topic" required></p>
+                    <p><label for="body" class="form-label-lg">Основной текст письма</label>
+                        <input class="form-control" name="body" id="body" required></p>
+                    <p><label for="date" class="form-label col-form-label-lg">Дата</label>
+                        <input class="form-control" name="date" id="date" required></p>
 
-
-                    <form method="post">
-                        <p><label for="recipient">Кому</label>
-                            <input name="recipient" id="recipient" required></p>
-                        <p><label for="topic">Тема</label>
-                            <input name="topic" id="topic" required></p>
-                        <p><label for="body">Основной текст письма</label>
-                            <input name="body" id="body" required></p>
-                        <p><label for="date">Дата</label>
-                            <input name="date" id="date" required></p>
-
-                        <p><label for="draft">Черновик - 1</label>
-                            <input name="draft" id="draft" required></p>
-                        <p>
-                            <button type="submit">Отправить</button>
-                            <button type="submit">Сохранить</button>
-                            <button type="reset">Очистить форму</button>
-                        </p>
-                    </form>
+                    <p><label for="draft" class="form-label col-form-label-lg">Черновик - 1</label>
+                        <input class="form-control" name="draft" id="draft" required></p></div>
+                    <p>
+                        <button type="submit">Отправить</button>
+                        <button type="submit">Сохранить</button>
+                        <button type="reset">Очистить форму</button>
+                    </p>
+            </form>
 
 
-                </div>
-            </div>
         </div>
     </div>
-</div>
 
+
+</div>
+</div>
 </body>
 </html>
 
