@@ -78,6 +78,80 @@
     </div>
 </div>
 
+<p class="h4 text-center font-italic">Кто с кем переписывается внутри отделов (unit'ов)</p>
+<div class="container">
+    <div class="row">
+        <div class="col">
+            <table class="table table-striped">
+                <th>Отдел</th>
+                <th>Отправитель</th>
+                <th>Получатель</th>
+                {% for st in result_statistics4 %}
+                <tr>
+                    <td>{{ st.unit }}</td>
+                    <td>{{ st.sender_id }}</td>
+                    <td>{{ st.recipients }}</td>
+                </tr>
+                {% endfor %}
+            </table>
+        </div>
+    </div>
+</div>
+
+
+<p class="h4 text-center font-italic">Кто с кем больше всего переписывается
+    (кол-во отправленных/полученных) внутри отделов (unit'ов)</p>
+<div class="container">
+    <div class="row">
+        <div class="col">
+            <table class="table table-striped">
+                <th>Отдел</th>
+                <th>Пользователь</th>
+                <th>Пользователь</th>
+                <th>Сумма писем</th>
+                {% for st in result_statistics5 %}
+                <tr>
+                    <td>{{ st.unit }}</td>
+                    <td>{{ st.person1 }}</td>
+                    <td>{{ st.person2 }}</td>
+                    <td>{{ st.num_letters }}</td>
+                </tr>
+                {% endfor %}
+            </table>
+        </div>
+    </div>
+</div>
+
+<p class="h4 text-center font-italic">Кто кого игнорирует (не отвечает на письма) внутри отделов (unit'ов)</p>
+<div class="container">
+    <div class="row">
+        <div class="col">
+            <table class="table table-striped">
+                <th>Отдел</th>
+                <th>Пользователь, который игнорирует</th>
+                <th>Игнорируемый пользователь</th>
+
+                {% for st in result_statistics6 %}
+                {% if st.sent_by_person1 == 0 %}
+                <tr>
+                    <td>{{ st.unit }}</td>
+                    <td>{{ st.person1 }}</td>
+                    <td>{{ st.person2 }}</td>
+                </tr>
+                {% elif st.sent_by_person2 == 0 %}
+                <tr>
+                    <td>{{ st.unit }}</td>
+                    <td>{{ st.person2 }}</td>
+                    <td>{{ st.person1 }}</td>
+                </tr>
+                {% endif %}
+                {% endfor %}
+            </table>
+        </div>
+    </div>
+</div>
+
+
 
 </body>
 </html>
