@@ -1,5 +1,6 @@
 <!doctype html>
 <html lang="en">
+{% set active_index = active_index|default('inbox') -%}
 <head>
     <meta charset="UTF-8">
     <meta name="viewport"
@@ -7,22 +8,30 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
           integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
-    {% block title %}}<title>Вхрдящие</title> {% endblok %}
+    <title>{% if active_index == 'inbox' %}
+        Входящие
+        {% elif active_index == 'outbox' %}
+        Исходящие
+        {% elif active_index == 'drafts' %}
+        Черновики
+        {% elif active_index == 'basket' %}
+        Корзина
+        {% elif active_index == 'letter' %}
+        Письмо
+        {% elif active_index == 'create_letter' %}
+        Написать письмо
+        {% endif %}
+    </title>
 </head>
 <body>
 <div class="container">
     <div class="row">
         <div class="col">
-
             <p class="h3 text-left font-bold" style="color:#563d7c">Здравствуйте, {{ user_surname }}!</p>
             <p class="h3 text-left font-bold" style="color:#563d7c">Вы вошли в ваш почтовый ящик: {{ user_email }}</p>
-
-
-
         </div>
     </div>
 </div>
-
 
 <div class="container-fluid">
     <div class="row">
@@ -30,62 +39,67 @@
             <nav class="navbar navbar-expand-lg navbar-dark" style="background-color:#563d7c">
                 <div class="collapse navbar-collapse" id="navbarSupportedContent">
                     <ul class="navbar-nav mr-auto flex-column">
-                        <li class="nav-item active">
-                            <a href="{{ url_for('inbox') }}" class="nav-link">Входящие ({{ inbox_count.count_for_inbox
-                                }}) - ({{ inbox_count.count_for_inbox_unread }})</a>
-                        </li>
                         <li class="nav-item">
-                            <a href="{{ url_for('outbox') }}" class="nav-link">Исходящие ({{
-                                inbox_count.count_for_outbox }}) </a>
-                        </li>
-                        <li class="nav-item">
-                            <a href="{{ url_for('drafts') }}" class="nav-link">Черновики ({{ inbox_count.count_for_draft
-                                }}) </a>
-                        </li>
-                        <li class="nav-item">
-                            <a href="{{ url_for('basket') }}" class="nav-link">Корзина ({{ inbox_count.count_for_basket
-                                }}) </a>
-                        </li>
-                        <li class="nav-item">
-                            <a href="{{ url_for('create_letter') }}" class="nav-link"> НАПИСАТЬ ПИСЬМО </a>
-                        </li>
+                            <a href="{{ url_for('inbox') }}" class="nav-link">
 
+                                {% if active_index == 'inbox' %}
+                                <h3> Входящие ({{ inbox_count.count_for_inbox }}) - ({{
+                                    inbox_count.count_for_inbox_unread }})</h3>
+                                {% else %}
+                                Входящие ({{ inbox_count.count_for_inbox }}) - ({{ inbox_count.count_for_inbox_unread
+                                }})
+                                {% endif %}
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="{{ url_for('outbox') }}" class="nav-link">
+
+                                {% if active_index == 'outbox' %}
+                                <h3> Исходящие ({{ inbox_count.count_for_outbox }}) </h3>
+                                {% else %}
+                                Исходящие ({{ inbox_count.count_for_outbox }})
+                                {% endif %}
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="{{ url_for('drafts') }}" class="nav-link">
+
+                                {% if active_index == 'drafts' %}
+                                <h3> Черновики ({{ inbox_count.count_for_draft }}) </h3>
+                                {% else %}
+                                Черновики ({{ inbox_count.count_for_draft }})
+                                {% endif %}
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="{{ url_for('basket') }}" class="nav-link">
+
+                                {% if active_index == 'basket' %}
+                                <h3> Корзина ({{ inbox_count.count_for_basket }}) </h3>
+                                {% else %}
+                                Корзина ({{ inbox_count.count_for_basket }})
+                                {% endif %}
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="{{ url_for('create_letter') }}" class="nav-link">
+                                {% if active_index == 'create_letter' %}
+                                <h3> Написать письмо </h3>
+                                {% else %}
+                                Написать письмо
+                                {% endif %}
+                            </a>
+                        </li>
                     </ul>
                 </div>
             </nav>
         </header>
-        <div class="col-md-8 col-lg-9 content-container" style="background-color: #BBDEFB">
-            <div class="row">
-                <div class="col">
-                    <table class="table">
 
-                        <thead>
-                        <tr>
-                            <th scope="col">Фамилия отправителя</th>
-                            <th scope="col">Адрес электронной почты</th>
-                            <th scope="col">Тема письма</th>
-                            <th scope="col">Дата</th>
-                        </tr>
-                        </thead>
+        {% block body %}
+        {% endblock %}
 
-                        <tbody>
-                        {% for mm in mails %}
-                        <tr>
-                            <td><a href="{{ url_for('letter', letter_id=mm.letter_id) }}">{{ mm.surname }}</a></td>
-                            <td><a href="{{ url_for('letter', letter_id=mm.letter_id) }}">{{ mm.email }}</a></td>
-                            <td><a href="{{ url_for('letter', letter_id=mm.letter_id) }}">{{ mm.topic }}</a></td>
-                            <td><a href="{{ url_for('letter', letter_id=mm.letter_id) }}">{{ mm.letter_date }}</a></td>
-                        </tr>
-                        {% endfor %}
-                        </tbody>
-
-                    </table>
-                </div>
-            </div>
-        </div>
     </div>
 </div>
-
 </body>
 </html>
 
