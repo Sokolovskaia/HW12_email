@@ -85,6 +85,19 @@ def start():
         return render_template('letter.html', mails=letter_result, inbox_count=count_result, user_email=user_email,
                                user_surname=user_surname, active_index='letter')
 
+    @app.route('/chain_full/<letter_id>')
+    def chain_full(letter_id):
+        chain_full_result = db.chain_of_letters(letter_id)
+        search_email = session['id']
+        user_email = session['login']
+        user_surname = session['last_name']
+        count_result = db.count_inbox_for_menu(search_email)
+        return render_template('chain_full.html', mails=chain_full_result, inbox_count=count_result, user_email=user_email,
+                               user_surname=user_surname, active_index='letter')
+
+
+
+
     @app.route('/create_letter', methods=('GET', 'POST'))
     def create_letter():
         search_email = session['id']
@@ -115,6 +128,8 @@ def start():
         return render_template('statistics.html', result_statistics1=stat1, result_statistics2=stat2,
                                result_statistics3=stat3, result_statistics4=stat4, result_statistics5=stat5,
                                result_statistics6=stat6)
+
+
 
     if os.getenv('APP_ENV') == 'PROD' and os.getenv('PORT'):
         waitress.serve(app, port=os.getenv('PORT'))

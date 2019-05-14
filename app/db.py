@@ -91,10 +91,56 @@ def basket_for_user(search_email):
 def full_letter(search_letter):
     with open_db(DATABASE_URL) as db:
         result = db.cursor().execute(
-            '''SELECT l.topic, u.surname, u.email, l.letter_date, l.letter_body 
+            '''SELECT l.letter_id, l.topic, u.surname, u.email, l.letter_date, l.letter_body 
                 FROM letters l LEFT JOIN users u ON l.recipient_id = u.id 
                 WHERE l.letter_id = :letter_id''',
             {'letter_id': search_letter}).fetchone()
+        return result
+
+
+def chain_of_letters(search_letter):  # ----Посмотреть всю цепочку писем
+    with open_db(DATABASE_URL) as db:
+        result = db.cursor().execute(
+            '''WITH RECURSIVE p1 AS (
+      SELECT letter_id
+           , parent_letter_id
+           , 0 AS level
+           , topic
+           , letter_body
+           , letter_date
+        FROM letters
+       WHERE letter_id = :letter_id
+   UNION ALL
+      SELECT l.letter_id
+           , l.parent_letter_id
+           , p1.level - 1
+           , l.topic
+           , l.letter_body
+           , l.letter_date
+      FROM letters l
+      JOIN p1 ON p1.parent_letter_id=l.letter_id
+    ), p2 AS (
+      SELECT letter_id
+           , parent_letter_id
+           , level
+           , topic
+           , letter_body
+           , letter_date
+        FROM p1
+       UNION
+      SELECT l.letter_id
+           , l.parent_letter_id
+           , p2.level + 1
+           , l.topic
+           , l.letter_body
+           , l.letter_date
+        FROM letters l
+        JOIN p2 ON l.parent_letter_id=p2.letter_id
+        )
+      SELECT *
+        FROM p2
+    ORDER BY level''',
+            {'letter_id': search_letter}).fetchall()
         return result
 
 

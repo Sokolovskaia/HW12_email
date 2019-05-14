@@ -14,7 +14,9 @@
                     <div class="card-footer text-muted">
                         {{ mails.letter_date }}
                     </div>
-                    <div><a href="{{ url_for('create_letter') }}" class="btn btn-info"> Написать письмо </a></div>
+                    <div><a href="{{ url_for('create_letter') }}" class="btn btn-info"> Написать письмо </a>
+                        <a href="{{ url_for('chain_full', letter_id=mails.letter_id) }}" class="btn btn-info"> Открыть всю переписку </a>
+
                 </div>
             </div>
         </div>

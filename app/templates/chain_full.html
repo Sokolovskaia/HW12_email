@@ -1,0 +1,32 @@
+{% extends "base.html" %}
+{% block body %}
+
+
+<div class="col-md-8 col-lg-9 content-container" style="background-color: #BBDEFB">
+    <div class="row">
+        <div class="col">
+            <p class="h2 text-center font-italic">История переписки</p>
+            <table class="table">
+                <thead>
+                <tr>
+                    <th scope="col">Дата</th>
+                    <th scope="col">Тема</th>
+                    <th scope="col">Текст письма</th>
+                </tr>
+                </thead>
+                <tbody>
+                {% for mm in mails %}
+                <tr>
+                    <td><a href="{{ url_for('letter', letter_id=mm.letter_id) }}">{{ mm.letter_date }}</a></td>
+                    <td><a href="{{ url_for('letter', letter_id=mm.letter_id) }}">{{ mm.topic }}</a></td>
+                    <td><a href="{{ url_for('letter', letter_id=mm.letter_id) }}">{{ mm.letter_body }}</a></td>
+                </tr>
+                {% endfor %}
+
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+{% endblock %}
