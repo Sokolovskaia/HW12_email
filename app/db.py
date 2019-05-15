@@ -210,28 +210,52 @@ def statistics_who_writes_to_whom():  # Кто с кем переписывае�
 def most_letters():
     with open_db(DATABASE_URL) as db:
         result = db.cursor().execute(
-            '''SELECT CASE WHEN l.sender_id <= l.recipient_id then l.sender_id else l.recipient_id end person1
-                    , CASE WHEN l.sender_id <= l.recipient_id then l.recipient_id else l.sender_id end person2
-                    , count (0) num_letters
-                 FROM letters l
-                WHERE l.draft = 0
-                GROUP BY person1, person2
-                ORDER BY num_letters DESC
-                LIMIT 10''').fetchall()
+            '''SELECT u1.surname sender_surname
+                    , u2.surname recipient_surname
+                    , l2.num_letters
+FROM (SELECT CASE WHEN l.sender_id <= l.recipient_id
+                  THEN l.sender_id
+                  ELSE l.recipient_id
+             END person1
+           , CASE WHEN l.sender_id <= l.recipient_id
+                  THEN l.recipient_id
+                  ELSE l.sender_id
+             END person2
+           , COUNT(0) num_letters
+  FROM letters l
+ WHERE l.draft = 0
+GROUP BY person1, person2
+) l2
+  JOIN users u1
+    ON u1.id = l2.person1
+  JOIN users u2
+    ON u2.id = l2.person2
+ORDER BY l2.num_letters DESC
+ LIMIT 10''').fetchall()
         return result
 
 
-def ignored_users():
+def ignored_users():  # Кто кого игнорирует (не отвечает на письма)
     with open_db(DATABASE_URL) as db:
         result = db.cursor().execute(
-            '''SELECT CASE WHEN l.sender_id <= l.recipient_id then l.sender_id else l.recipient_id end person1
-                    , CASE WHEN l.sender_id <= l.recipient_id then l.recipient_id else l.sender_id end person2
+            '''SELECT u1.surname person1_surname
+                    , u2.surname person2_surname
+                    , l2.sent_by_person1
+                    , l2.sent_by_person2
+FROM (SELECT CASE WHEN l.sender_id <= l.recipient_id 
+                  THEN l.sender_id ELSE l.recipient_id END person1
+           , CASE WHEN l.sender_id <= l.recipient_id 
+                  THEN l.recipient_id ELSE l.sender_id END person2
                     , coalesce (sum (CASE WHEN l.sender_id <= l.recipient_id then 1 else 0 end), 0) sent_by_person1
                     , coalesce (sum (CASE WHEN l.sender_id <= l.recipient_id then 0 else 1 end), 0) sent_by_person2
                  FROM letters l
                 WHERE l.draft = 0
              GROUP BY person1, person2
-         HAVING 0 IN (sent_by_person1, sent_by_person2)''').fetchall()
+         HAVING 0 IN (sent_by_person1, sent_by_person2)) l2
+                 JOIN users u1
+                   ON u1.id = l2.person1
+                 JOIN users u2
+                   ON u2.id = l2.person2''').fetchall()
         return result
 
 

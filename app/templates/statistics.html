@@ -41,8 +41,8 @@
                 <th>Сумма писем</th>
                 {% for st in result_statistics2 %}
                 <tr>
-                    <td>{{ st.person1 }}</td>
-                    <td>{{ st.person2 }}</td>
+                    <td>{{ st.sender_surname }}</td>
+                    <td>{{ st.recipient_surname }}</td>
                     <td>{{ st.num_letters }}</td>
                 </tr>
                 {% endfor %}
@@ -63,13 +63,13 @@
                 {% for st in result_statistics3 %}
                 {% if st.sent_by_person1 == 0 %}
                 <tr>
-                    <td>{{ st.person1 }}</td>
-                    <td>{{ st.person2 }}</td>
+                    <td>{{ st.person1_surname }}</td>
+                    <td>{{ st.person2_surname }}</td>
                 </tr>
                 {% elif st.sent_by_person2 == 0 %}
                 <tr>
-                    <td>{{ st.person2 }}</td>
-                    <td>{{ st.person1 }}</td>
+                    <td>{{ st.person2_surname }}</td>
+                    <td>{{ st.person1_surname }}</td>
                 </tr>
                 {% endif %}
                 {% endfor %}
