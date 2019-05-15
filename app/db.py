@@ -1,6 +1,5 @@
 import sqlite3
 
-from werkzeug.security import check_password_hash
 
 DATABASE_URL = 'data/db.sqlite'
 
@@ -144,7 +143,7 @@ def chain_of_letters(search_letter):  # ----Посмотреть всю цепо
         return result
 
 
-def count_inbox_for_menu(search_email):
+def counts_for_menu(search_email):
     with open_db(DATABASE_URL) as db:
         result = db.cursor().execute(
             '''SELECT SUM (inbox)                                                     count_for_inbox
@@ -328,20 +327,27 @@ def length_of_longest_chain():  # Длина самой большой цепо�
     with open_db(DATABASE_URL) as db:
         result = db.cursor().execute(
             '''WITH RECURSIVE p1 AS (
-      SELECT letter_id first_id
-           , letter_id
-        FROM letters
-       WHERE parent_letter_id ISNULL
-   UNION ALL
-      SELECT p1.first_id
-           , l.letter_id
-        FROM letters l
-  JOIN p1 ON p1.letter_id=l.parent_letter_id
-  )
-      SELECT first_id
-  , count(*) num_letter
-  FROM p1
-    GROUP BY first_id
-    ORDER BY num_letter DESC
-       LIMIT 1''').fetchall()
+                       SELECT l.letter_id first_id
+                            , l.sender_id
+                            , l.topic
+                            , l.letter_id
+                         FROM letters l
+                        WHERE l.parent_letter_id ISNULL
+                    UNION ALL
+                       SELECT p1.first_id
+                            , p1.sender_id
+                            , p1.topic
+                            , l.letter_id
+                         FROM letters l
+                         JOIN p1 ON p1.letter_id=l.parent_letter_id
+                  )
+                       SELECT p1.topic
+                            , u.surname
+                            , count(*) num_letter
+                         FROM p1
+                         JOIN users u 
+                         ON u.id = p1.sender_id
+                     GROUP BY p1.first_id, u.surname, p1.topic 
+                     ORDER BY num_letter DESC
+                        LIMIT 1''').fetchall()
         return result

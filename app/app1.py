@@ -41,7 +41,7 @@ def start():
         user_email = session['login']
         user_surname = session['last_name']
         inbox_result = db.inbox_for_user(search_email)
-        count_result = db.count_inbox_for_menu(search_email)
+        count_result = db.counts_for_menu(search_email)
         return render_template('inbox.html', mails=inbox_result, inbox_count=count_result, user_email=user_email,
                                user_surname=user_surname, active_index='inbox')
 
@@ -51,7 +51,7 @@ def start():
         user_email = session['login']
         user_surname = session['last_name']
         outbox_result = db.outbox_for_user(search_email)
-        count_result = db.count_inbox_for_menu(search_email)
+        count_result = db.counts_for_menu(search_email)
         return render_template('inbox.html', mails=outbox_result, inbox_count=count_result, user_email=user_email,
                                user_surname=user_surname, active_index='outbox')
 
@@ -61,7 +61,7 @@ def start():
         user_email = session['login']
         user_surname = session['last_name']
         drafts_result = db.drafts_for_user(search_email)
-        count_result = db.count_inbox_for_menu(search_email)
+        count_result = db.counts_for_menu(search_email)
         return render_template('inbox.html', mails=drafts_result, inbox_count=count_result, user_email=user_email,
                                user_surname=user_surname, active_index='drafts')
 
@@ -71,7 +71,7 @@ def start():
         user_email = session['login']
         user_surname = session['last_name']
         basket_result = db.basket_for_user(search_email)
-        count_result = db.count_inbox_for_menu(search_email)
+        count_result = db.counts_for_menu(search_email)
         return render_template('inbox.html', mails=basket_result, inbox_count=count_result, user_email=user_email,
                                user_surname=user_surname, active_index='basket')
 
@@ -81,7 +81,7 @@ def start():
         search_email = session['id']
         user_email = session['login']
         user_surname = session['last_name']
-        count_result = db.count_inbox_for_menu(search_email)
+        count_result = db.counts_for_menu(search_email)
         return render_template('letter.html', mails=letter_result, inbox_count=count_result, user_email=user_email,
                                user_surname=user_surname, active_index='letter')
 
@@ -91,7 +91,7 @@ def start():
         search_email = session['id']
         user_email = session['login']
         user_surname = session['last_name']
-        count_result = db.count_inbox_for_menu(search_email)
+        count_result = db.counts_for_menu(search_email)
         return render_template('chain_full.html', mails=chain_full_result, inbox_count=count_result,
                                user_email=user_email,
                                user_surname=user_surname, active_index='letter')
@@ -101,7 +101,7 @@ def start():
         search_email = session['id']
         user_email = session['login']
         user_surname = session['last_name']
-        count_result = db.count_inbox_for_menu(search_email)
+        count_result = db.counts_for_menu(search_email)
         if request.method == 'POST':
             recipient = request.form['recipient']
             topic = request.form['topic']

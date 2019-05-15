@@ -156,11 +156,13 @@
     <div class="row">
         <div class="col">
             <table class="table table-striped">
-                <th>id первого письма в цепочке</th>
+                <th>Тема</th>
+                <th>Отправитель</th>
                 <th>Количество писем</th>
                 {% for st in result_statistics7 %}
                 <tr>
-                    <td>{{ st.first_id }}</td>
+                    <td>{{ st.topic }}</td>
+                    <td>{{ st.surname }}</td>
                     <td>{{ st.num_letter }}</td>
                 </tr>
                 {% endfor %}
