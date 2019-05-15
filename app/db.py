@@ -196,13 +196,14 @@ def create(search_email, recipient, topic, body, date, draft):
     return result
 
 
-def statistics_who_writes_to_whom():
+def statistics_who_writes_to_whom():  # Кто с кем переписывается
     with open_db(DATABASE_URL) as db:
         result = db.cursor().execute(
-            '''SELECT DISTINCT l.sender_id, group_concat(DISTINCT l.recipient_id) recipients
-            FROM letters l
-            WHERE l.draft = 0
-            GROUP BY l.sender_id''').fetchall()
+            '''SELECT l.sender_id, u.surname sender_surname, group_concat(DISTINCT l.recipient_id), group_concat(DISTINCT u2.surname) recipient_surname
+                 FROM letters l JOIN users u on l.sender_id = u.id
+                 JOIN users u2 on l.recipient_id=u2.id
+                WHERE l.draft = 0
+             GROUP BY l.sender_id''').fetchall()
         return result
 
 
