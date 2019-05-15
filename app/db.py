@@ -290,3 +290,26 @@ def ignored_users_by_units():  # Кто кого игнорирует (не от
                                , person2
                     having 0 in (sent_by_person1, sent_by_person2)''').fetchall()
         return result
+
+
+def length_of_longest_chain():  # Длина самой большой цепочки
+    with open_db(DATABASE_URL) as db:
+        result = db.cursor().execute(
+            '''WITH RECURSIVE p1 AS (
+      SELECT letter_id first_id
+           , letter_id
+        FROM letters
+       WHERE parent_letter_id ISNULL
+   UNION ALL
+      SELECT p1.first_id
+           , l.letter_id
+        FROM letters l
+  JOIN p1 ON p1.letter_id=l.parent_letter_id
+  )
+      SELECT first_id
+  , count(*) num_letter
+  FROM p1
+    GROUP BY first_id
+    ORDER BY num_letter DESC
+       LIMIT 1''').fetchall()
+        return result

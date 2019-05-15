@@ -150,5 +150,28 @@
         </div>
     </div>
 </div>
+
+<p class="h4 text-center font-italic">Длина самой большой цепочки</p>
+<div class="container">
+    <div class="row">
+        <div class="col">
+            <table class="table table-striped">
+                <th>id первого письма в цепочке</th>
+                <th>Количество писем</th>
+                {% for st in result_statistics7 %}
+                <tr>
+                    <td>{{ st.first_id }}</td>
+                    <td>{{ st.num_letter }}</td>
+                </tr>
+                {% endfor %}
+            </table>
+        </div>
+    </div>
+</div>
+
+
+<div class="text-center"><a href="{{ url_for('login') }}" class="btn btn-info"> На стартовую страницу </a></div>
+
+
 </body>
 </html>

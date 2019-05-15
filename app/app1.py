@@ -125,9 +125,10 @@ def start():
         stat4 = db.statistics_who_writes_to_whom_by_units()  # Кто с кем переписывается разрезе отделов (unit'ов)
         stat5 = db.most_letters_by_units()  # Кто с кем переписывается разрезе отделов (unit'ов)
         stat6 = db.ignored_users_by_units()  # Кто кого игнорирует (не отвечает на письма) разрезе отделов (unit'ов)
+        stat7 = db.length_of_longest_chain()  # Длина самой большой цепочки
         return render_template('statistics.html', result_statistics1=stat1, result_statistics2=stat2,
                                result_statistics3=stat3, result_statistics4=stat4, result_statistics5=stat5,
-                               result_statistics6=stat6)
+                               result_statistics6=stat6, result_statistics7=stat7)
 
 
 
