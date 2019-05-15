@@ -262,9 +262,11 @@ FROM (SELECT CASE WHEN l.sender_id <= l.recipient_id
 def statistics_who_writes_to_whom_by_units():  # Кто с кем переписывается разрезе отделов (unit'ов)
     with open_db(DATABASE_URL) as db:
         result = db.cursor().execute(
-            '''SELECT u1.unit    
+            '''SELECT u1.unit
                     , l.sender_id
+                    , u1.surname sender_surname
                     , group_concat(DISTINCT l.recipient_id) recipients
+                    , group_concat(DISTINCT u2.surname) recipients_surname
                  FROM letters l
                  JOIN users u1
                    ON l.sender_id = u1.id
@@ -279,8 +281,10 @@ def statistics_who_writes_to_whom_by_units():  # Кто с кем перепис
 def most_letters_by_units():  # Кто с кем больше всего переписывается (кол-во отправленных/полученных) разрезе отделов (unit'ов)
     with open_db(DATABASE_URL) as db:
         result = db.cursor().execute(
-            '''SELECT CASE WHEN l.sender_id <= l.recipient_id then l.sender_id else l.recipient_id end person1   ----Кто с кем больше всего переписывается (кол-во отправленных/полученных) разрезе отделов (unit'ов)
-                    , CASE WHEN l.sender_id <= l.recipient_id then l.recipient_id else l.sender_id end person2
+            '''SELECT CASE WHEN l.sender_id <= l.recipient_id THEN l.sender_id ELSE l.recipient_id END person1
+                    , CASE WHEN l.sender_id <= l.recipient_id THEN l.recipient_id ELSE l.sender_id END person2
+                    , u1.surname person_1_surname
+                    , u2.surname person_2_surname
                     , count (0) num_letters
                               , u1.unit
                            FROM letters l
@@ -299,21 +303,24 @@ def most_letters_by_units():  # Кто с кем больше всего пер�
 def ignored_users_by_units():  # Кто кого игнорирует (не отвечает на письма) разрезе отделов (unit'ов)
     with open_db(DATABASE_URL) as db:
         result = db.cursor().execute(
-            '''SELECT CASE WHEN l.sender_id <= l.recipient_id then l.sender_id else l.recipient_id end person1
-                     , CASE WHEN l.sender_id <= l.recipient_id then l.recipient_id else l.sender_id end person2
-                               , coalesce(sum(CASE WHEN l.sender_id <= l.recipient_id then 1 else 0 end), 0)      sent_by_person1
-                               , coalesce(sum(CASE WHEN l.sender_id <= l.recipient_id then 0 else 1 end), 0)      sent_by_person2
-                               , u1.unit
-                            FROM letters l
-                            JOIN users u1
-                              ON l.sender_id = u1.id
-                            JOIN users u2
-                              ON l.recipient_id = u2.id
-                           WHERE u1.unit = u2.unit
-                             AND l.draft = 0
-                        GROUP BY person1
-                               , person2
-                    having 0 in (sent_by_person1, sent_by_person2)''').fetchall()
+            '''SELECT CASE WHEN l.sender_id <= l.recipient_id THEN l.sender_id ELSE l.recipient_id END person1
+                    , CASE WHEN l.sender_id <= l.recipient_id THEN l.recipient_id else l.sender_id END person2
+       , coalesce(sum(CASE WHEN l.sender_id <= l.recipient_id THEN 1 ELSE 0 END), 0)      sent_by_person1
+       , coalesce(sum(CASE WHEN l.sender_id <= l.recipient_id THEN 0 else 1 END), 0)      sent_by_person2
+                              , u1.unit
+                              , u2.unit
+                              , u1.surname person_1_surname
+                              , u2.surname person_2_surname
+                           FROM letters l
+                           JOIN users u1
+                             ON l.sender_id = u1.id
+                           JOIN users u2
+                             ON l.recipient_id = u2.id
+                          WHERE u1.unit = u2.unit
+                            AND l.draft = 0
+                       GROUP BY person1
+                              , person2
+                         having 0 in (sent_by_person1, sent_by_person2)''').fetchall()
         return result
 
 
