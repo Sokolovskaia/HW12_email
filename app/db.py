@@ -351,7 +351,7 @@ def length_of_longest_chain():  # Длина самой большой цепо�
         return result
 
 
-def from_drafts_to_basket(search_email):
+def from_drafts_to_basket(search_email):  # Удалить все черновики (поместить в корзину)
     with open_db(DATABASE_URL) as db:
         result = db.cursor().execute(
             '''UPDATE letters
@@ -359,5 +359,27 @@ def from_drafts_to_basket(search_email):
                 WHERE draft = 1
                   AND deleted = 0
                   AND sender_id = :search_email''',
+            {'search_email': search_email}).fetchall()
+        return result
+
+
+def from_inbox_to_basket(search_email):  # Удалить все входящие (поместить в корзину)
+    with open_db(DATABASE_URL) as db:
+        result = db.cursor().execute(
+            '''UPDATE letters
+                  SET deleted = 1
+                WHERE draft = 0
+                  AND deleted = 0
+                  AND recipient_id = :search_email''',
+            {'search_email': search_email}).fetchall()
+        return result
+
+
+def clear_basket(search_email):  # Удалить всё из корзины
+    with open_db(DATABASE_URL) as db:
+        result = db.cursor().execute(
+            '''DELETE FROM letters
+                     WHERE :search_email IN (sender_id, recipient_id)
+                       AND deleted = 1''',
             {'search_email': search_email}).fetchall()
         return result

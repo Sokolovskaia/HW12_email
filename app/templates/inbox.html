@@ -22,10 +22,36 @@
                     <td><a href="{{ url_for('letter', letter_id=mm.letter_id) }}">{{ mm.letter_date }}</a></td>
                 </tr>
                 {% endfor %}
+
+
                 </tbody>
             </table>
+
+            {% if active_index == 'drafts' %}
+            <form method="post">
+                <button class="btn btn-info" type="submit"> Удалить все черновики </button>
+            </form>
+            {% endif %}
+
+            {% if active_index == 'inbox' %}
+            <form method="post">
+                <button class="btn btn-info" type="submit"> Удалить все входящие</button>
+            </form>
+            {% endif %}
+
+
+            {% if active_index == 'basket' %}
+            <form method="post">
+                <button class="btn btn-info" type="submit"> Очистить корзину </button>
+            </form>
+            {% endif %}
+
+
         </div>
+
     </div>
+
 </div>
+
 
 {% endblock %}

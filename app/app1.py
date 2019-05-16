@@ -35,13 +35,16 @@ def start():
 
         return render_template('login.html')
 
-    @app.route('/inbox')
+    @app.route('/inbox', methods=('GET', 'POST'))
     def inbox():
         search_email = session['id']
         user_email = session['login']
         user_surname = session['last_name']
         inbox_result = db.inbox_for_user(search_email)
         count_result = db.counts_for_menu(search_email)
+        if request.method == 'POST':       # Удалить все входящие (поместить в корзину)
+            db.from_inbox_to_basket(search_email)
+            return redirect(url_for('inbox'))
         return render_template('inbox.html', mails=inbox_result, inbox_count=count_result, user_email=user_email,
                                user_surname=user_surname, active_index='inbox')
 
@@ -55,23 +58,29 @@ def start():
         return render_template('inbox.html', mails=outbox_result, inbox_count=count_result, user_email=user_email,
                                user_surname=user_surname, active_index='outbox')
 
-    @app.route('/drafts')
+    @app.route('/drafts', methods=('GET', 'POST'))
     def drafts():
         search_email = session['id']
         user_email = session['login']
         user_surname = session['last_name']
         drafts_result = db.drafts_for_user(search_email)
         count_result = db.counts_for_menu(search_email)
+        if request.method == 'POST':       # Удалить все черновики (поместить в корзину)
+            db.from_drafts_to_basket(search_email)
+            return redirect(url_for('drafts'))
         return render_template('inbox.html', mails=drafts_result, inbox_count=count_result, user_email=user_email,
                                user_surname=user_surname, active_index='drafts')
 
-    @app.route('/basket')
+    @app.route('/basket', methods=('GET', 'POST'))
     def basket():
         search_email = session['id']
         user_email = session['login']
         user_surname = session['last_name']
         basket_result = db.basket_for_user(search_email)
         count_result = db.counts_for_menu(search_email)
+        if request.method == 'POST':       # Очистить корзину
+            db.clear_basket(search_email)
+            return redirect(url_for('basket'))
         return render_template('inbox.html', mails=basket_result, inbox_count=count_result, user_email=user_email,
                                user_surname=user_surname, active_index='basket')
 
