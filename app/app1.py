@@ -107,21 +107,31 @@ def start():
 
     @app.route('/create_letter', methods=('GET', 'POST'))
     def create_letter():
+        letter_result = None
         search_email = session['id']
         user_email = session['login']
         user_surname = session['last_name']
         count_result = db.counts_for_menu(search_email)
+
         if request.method == 'POST':
-            recipient = request.form['recipient']
             topic = request.form['topic']
             body = request.form['body']
             date = request.form['date']
             draft = request.form['draft']
-            db.create(search_email, recipient, topic, body, date, draft)
+            if 'letterid' in request.args.keys():
+                let = request.args.get('letterid')
+                db.update(let, topic, body, date, draft)
+            else:
+                recipient = request.form['recipient']
+                db.create(search_email, recipient, topic, body, date, draft)
 
             return redirect(url_for('inbox'))
 
-        return render_template('new_letter.html', inbox_count=count_result, user_email=user_email,
+        if 'letterid' in request.args.keys():
+            let = request.args.get('letterid')
+            letter_result = db.full_letter(let)
+
+        return render_template('new_letter.html', mails=letter_result, inbox_count=count_result, user_email=user_email,
                                user_surname=user_surname, active_index='create_letter')
 
     @app.route('/statistics')

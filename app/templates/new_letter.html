@@ -3,22 +3,36 @@
 
 
 <div class="container">
+    {% if mails is none %}
     <h2>Создать новое письмо</h2>
+    {% else %}
+    <h2>Редактировать письмо</h2>
+    {% endif %}
     <form method="post">
         <div class="form-group">
             <p><label for="recipient" class="form-label-lg col-form-label-lg">Кому</label>
-                <input class="form-control" name="recipient" id="recipient"></p>
+
+                {% if mails is none %}
+                <input class="form-control" name="recipient" value="{{ mails.surname }}" id="recipient">
+                {% else %}
+                <input class="form-control" name="recipient" value="{{ mails.surname }}" id="recipient" disabled>
+                {% endif %}</p>
+
             <p><label for="topic" class="form-label-lg col-form-label-lg">Тема</label>
-                <input class="form-control" name="topic" id="topic"></p>
+                <input class="form-control" name="topic" value="{{ mails.topic }}" id="topic"></p>
             <p><label for="body" class="form-label-lg col-form-label-lg">Основной текст письма</label>
-                <input class="form-control" name="body" id="body"></p>
+                <input class="form-control" name="body" value="{{ mails.letter_body }}" id="body"></p>
             <p><label for="date" class="form-label col-form-label-lg">Дата</label>
-                <input class="form-control" name="date" id="date" required></p>
+                <input class="form-control" name="date" value="{{ mails.letter_date }}" id="date" required></p>
 
             <p>
                 <button class="btn btn-info" type="submit" value="0" name="draft"> Отправить</button>
                 <button class="btn btn-info" type="submit" value="1" name="draft"> Сохранить</button>
+
+                {% if mails is none %}
                 <button class="btn btn-info" type="reset"> Очистить форму</button>
+                {% endif %}
+
             </p>
         </div>
     </form>

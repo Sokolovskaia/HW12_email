@@ -383,3 +383,16 @@ def clear_basket(search_email):  # Удалить всё из корзины
                        AND deleted = 1''',
             {'search_email': search_email}).fetchall()
         return result
+
+
+def update(let, topic, body, date, draft):  #  Редактирование письма
+    with open_db(DATABASE_URL) as db:
+        result = db.cursor().execute(
+            '''UPDATE letters
+                  SET topic = :topic
+                    , letter_body = :body
+                    , letter_date = :date
+                    , draft = :draft
+                WHERE letter_id = :let''',
+            {'let': let, 'topic': topic, 'body': body, 'date': date, 'draft': draft}).fetchall()
+        return result

@@ -18,7 +18,7 @@
 
             {% if mails.draft == 1 %}
 
-             <div><a href="{{ url_for('create_letter') }}" class="btn btn-info"> Отправить письмо из черновика </a>
+             <div><a href="{{ url_for('create_letter', letterid=mails.letter_id) }}" class="btn btn-info"> Редактировать письмо </a>
 
             {% else %}
             <div><a href="{{ url_for('create_letter') }}" class="btn btn-info"> Написать письмо </a>
