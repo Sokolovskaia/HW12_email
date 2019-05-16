@@ -1,24 +1,37 @@
 {% extends "base.html" %}
-{% block body %}
-        <div class="card w-75">
-            <div class="card-body">
-                <div class="card text-center">
-                    <div class="card-header">
-                        Фамилия отправителя: {{mails.surname }}
-                        <p> Email отправителя: {{ mails.email }}</p>
-                    </div>
-                    <div class="card-body">
-                        <h5 class="card-title"> Тема письма: {{ mails.topic }} </h5>
-                        <p class="card-text"> {{ mails.letter_body }} </p>
-                    </div>
-                    <div class="card-footer text-muted">
-                        {{ mails.letter_date }}
-                    </div>
-                    <div><a href="{{ url_for('create_letter') }}" class="btn btn-info"> Написать письмо </a>
-                        <a href="{{ url_for('chain_full', letter_id=mails.letter_id) }}" class="btn btn-info"> Открыть всю переписку </a>
 
-                </div>
+{% block body %}
+<div class="card w-75">
+    <div class="card-body">
+        <div class="card text-center">
+            <div class="card-header">
+                Фамилия отправителя: {{mails.surname }}
+                <p> Email отправителя: {{ mails.email }}</p>
             </div>
+            <div class="card-body">
+                <h5 class="card-title"> Тема письма: {{ mails.topic }} </h5>
+                <p class="card-text"> {{ mails.letter_body }} </p>
+            </div>
+            <div class="card-footer text-muted">
+                {{ mails.letter_date }}
+            </div>
+
+            {% if mails.draft == 1 %}
+
+             <div><a href="{{ url_for('create_letter') }}" class="btn btn-info"> Отправить письмо из черновика </a>
+
+            {% else %}
+            <div><a href="{{ url_for('create_letter') }}" class="btn btn-info"> Написать письмо </a>
+                <a href="{{ url_for('chain_full', letter_id=mails.letter_id) }}" class="btn btn-info"> Открыть всю
+                    переписку </a></div>
+                {% endif %}
+
         </div>
+    </div>
+</div>
+
+
+
+
 
 {% endblock %}

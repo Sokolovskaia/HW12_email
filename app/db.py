@@ -1,6 +1,5 @@
 import sqlite3
 
-
 DATABASE_URL = 'data/db.sqlite'
 
 
@@ -62,7 +61,7 @@ def outbox_for_user(search_email):
 def drafts_for_user(search_email):
     with open_db(DATABASE_URL) as db:
         result = db.cursor().execute(
-            '''SELECT u.surname, u.email, l.topic, l.letter_date, l.letter_id 
+            '''SELECT u.surname, u.email, l.topic, l.letter_date, l.letter_id
                 FROM letters l LEFT JOIN users u ON l.recipient_id = u.id 
                 WHERE l.sender_id = :search_email 
                 AND l.deleted = 0 
@@ -80,7 +79,6 @@ def basket_for_user(search_email):
                 FROM letters l LEFT JOIN users u ON l.recipient_id = u.id 
                 WHERE :search_email IN (l.sender_id, l.recipient_id) 
                 AND l.deleted = 1 
-                AND l.draft = 0 
                 ORDER BY l.letter_id 
                 DESC LIMIT 20''',
             {'search_email': search_email}).fetchall()
@@ -90,7 +88,7 @@ def basket_for_user(search_email):
 def full_letter(search_letter):
     with open_db(DATABASE_URL) as db:
         result = db.cursor().execute(
-            '''SELECT l.letter_id, l.topic, u.surname, u.email, l.letter_date, l.letter_body 
+            '''SELECT l.letter_id, l.topic, u.surname, u.email, l.letter_date, l.letter_body,  l.draft 
                 FROM letters l LEFT JOIN users u ON l.recipient_id = u.id 
                 WHERE l.letter_id = :letter_id''',
             {'letter_id': search_letter}).fetchone()
@@ -350,4 +348,16 @@ def length_of_longest_chain():  # Длина самой большой цепо�
                      GROUP BY p1.first_id, u.surname, p1.topic 
                      ORDER BY num_letter DESC
                         LIMIT 1''').fetchall()
+        return result
+
+
+def from_drafts_to_basket(search_email):
+    with open_db(DATABASE_URL) as db:
+        result = db.cursor().execute(
+            '''UPDATE letters
+                  SET deleted = 1
+                WHERE draft = 1
+                  AND deleted = 0
+                  AND sender_id = :search_email''',
+            {'search_email': search_email}).fetchall()
         return result
