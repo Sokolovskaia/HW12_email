@@ -1,6 +1,6 @@
 import sqlite3
 
-DATABASE_URL = './data/db.sqlite'
+DATABASE_URL = 'db.sqlite'
 
 
 def open_db(db_url):
