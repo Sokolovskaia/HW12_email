@@ -1,5 +1,9 @@
 # Корпоративная почта
 
+[![Build Status](https://travis-ci.org/Sokolovskaia/HW12_email.svg?branch=master)](https://travis-ci.org/Sokolovskaia/HW12_email)
+
+
+
 
 ## Данные для входа в почту
  email | пароль
