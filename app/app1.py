@@ -6,8 +6,6 @@ from app.db import validate_user
 
 import os
 
-DATABASE_URL = 'data/db.sqlite'
-
 
 def start():
     app = Flask(__name__)
