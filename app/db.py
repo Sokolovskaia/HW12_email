@@ -2,7 +2,6 @@ import sqlite3
 
 DATABASE_URL = 'db.sqlite'
 
-
 def open_db(db_url):
     db = sqlite3.connect(db_url)
     db.row_factory = sqlite3.Row

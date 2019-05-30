@@ -40,7 +40,7 @@ def start():
         user_surname = session['last_name']
         inbox_result = db.inbox_for_user(search_email)
         count_result = db.counts_for_menu(search_email)
-        if request.method == 'POST':       # Удалить все входящие (поместить в корзину)
+        if request.method == 'POST':  # Удалить все входящие (поместить в корзину)
             db.from_inbox_to_basket(search_email)
             return redirect(url_for('inbox'))
         return render_template('inbox.html', mails=inbox_result, inbox_count=count_result, user_email=user_email,
@@ -63,7 +63,7 @@ def start():
         user_surname = session['last_name']
         drafts_result = db.drafts_for_user(search_email)
         count_result = db.counts_for_menu(search_email)
-        if request.method == 'POST':       # Удалить все черновики (поместить в корзину)
+        if request.method == 'POST':  # Удалить все черновики (поместить в корзину)
             db.from_drafts_to_basket(search_email)
             return redirect(url_for('drafts'))
         return render_template('inbox.html', mails=drafts_result, inbox_count=count_result, user_email=user_email,
@@ -76,7 +76,7 @@ def start():
         user_surname = session['last_name']
         basket_result = db.basket_for_user(search_email)
         count_result = db.counts_for_menu(search_email)
-        if request.method == 'POST':       # Очистить корзину
+        if request.method == 'POST':  # Очистить корзину
             db.clear_basket(search_email)
             return redirect(url_for('basket'))
         return render_template('inbox.html', mails=basket_result, inbox_count=count_result, user_email=user_email,
@@ -134,16 +134,20 @@ def start():
 
     @app.route('/statistics')
     def statistics():
-        stat1 = db.statistics_who_writes_to_whom()  # кто с кем переписывается
-        stat2 = db.most_letters()  # Кто с кем больше всего переписывается (кол-во отправленных/полученных)
-        stat3 = db.ignored_users()  # Кто кого игнорирует (не отвечает на письма)
-        stat4 = db.statistics_who_writes_to_whom_by_units()  # Кто с кем переписывается разрезе отделов (unit'ов)
-        stat5 = db.most_letters_by_units()  # Кто с кем переписывается разрезе отделов (unit'ов)
-        stat6 = db.ignored_users_by_units()  # Кто кого игнорирует (не отвечает на письма) разрезе отделов (unit'ов)
-        stat7 = db.length_of_longest_chain()  # Длина самой большой цепочки
-        return render_template('statistics.html', result_statistics1=stat1, result_statistics2=stat2,
-                               result_statistics3=stat3, result_statistics4=stat4, result_statistics5=stat5,
-                               result_statistics6=stat6, result_statistics7=stat7)
+        stat_who_writes_to_whom = db.statistics_who_writes_to_whom()  # кто с кем переписывается 1
+        stat_most_letters = db.most_letters()  # Кто с кем больше всего переписывается (кол-во отправленных/полученных) 2
+        stat_ignored_users = db.ignored_users()  # Кто кого игнорирует (не отвечает на письма) 3
+        stat_who_writes_to_whom_by_units = db.statistics_who_writes_to_whom_by_units()  # Кто с кем переписывается разрезе отделов (unit'ов) 4
+        stat_most_letters_by_units = db.most_letters_by_units()  # Кто с кем переписывается разрезе отделов (unit'ов) 5
+        stat_ignored_users_by_units = db.ignored_users_by_units()  # Кто кого игнорирует (не отвечает на письма) разрезе отделов (unit'ов) 6
+        stat_length_of_longest_chain = db.length_of_longest_chain()  # Длина самой большой цепочки 7
+        return render_template('statistics.html', result_statistics1=stat_who_writes_to_whom,
+                               result_statistics2=stat_most_letters,
+                               result_statistics3=stat_ignored_users,
+                               result_statistics4=stat_who_writes_to_whom_by_units,
+                               result_statistics5=stat_most_letters_by_units,
+                               result_statistics6=stat_ignored_users_by_units,
+                               result_statistics7=stat_length_of_longest_chain)
 
     if os.getenv('APP_ENV') == 'PROD' and os.getenv('PORT'):
         waitress.serve(app, port=os.getenv('PORT'))
